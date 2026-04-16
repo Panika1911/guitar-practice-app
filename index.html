@@ -4,9 +4,12 @@
   <meta charset="UTF-8">
   <title>Guitar Practice Assistant</title>
   <link rel="stylesheet" href="style.css">
-</head>
+</<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>>
 
-<body>
+<<div class="chart-container">
+  <h3>📊 Practice Progress</h3>
+  <canvas id="progressChart"></canvas>
+</div>>
 
 <div class="container">
 
@@ -35,8 +38,38 @@
 
   </div>
 </div>
-
+  
 <script>
+let chart;
+
+function updateChart() {
+  const ctx = document.getElementById("progressChart").getContext("2d");
+
+  if (chart) chart.destroy();
+
+  chart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: ["Sessions"],
+      datasets: [{
+        label: "Practice Count",
+        data: [sessions],
+        backgroundColor: "#22c55e"
+      }]
+    }
+  });
+}
+
+// call once on load
+window.onload = () => {
+  const last = localStorage.getItem("lastChord");
+  if (last) {
+    document.getElementById("selected").innerText =
+      "Last Chosen Chord: " + last;
+  }
+
+  updateChart();
+};
 let timer = 0;
 let interval;
 let sessions = localStorage.getItem("sessions") || 0;
@@ -70,6 +103,7 @@ function startPractice() {
 }
 
 function stopPractice() {
+  
   clearInterval(interval);
 
   timer = 0;
@@ -78,6 +112,8 @@ function stopPractice() {
   sessions++;
   localStorage.setItem("sessions", sessions);
   document.getElementById("count").innerText = sessions;
+
+  updateChart(); // 🔥 update graph
 }
 
 // Load last selected chord
