@@ -1,21 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Guitar Practice Assistant</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-  <h1>🎸 Guitar Practice Assistant</h1>
-  <p>Click below to start your session</p>
+  <div class="container">
+    <h1>🎸 Guitar Practice Assistant</h1>
+    <p class="subtitle">Track your practice like a pro musician</p>
 
-  <button onclick="startPractice()">Start Practice</button>
+    <div class="card">
+      <h2>Select Chord</h2>
 
-  <script>
-    function startPractice() {
-      alert("Practice Started 🎸");
-    }
-  </script>
+      <div class="buttons">
+        <button onclick="selectChord('C')">C Major</button>
+        <button onclick="selectChord('G')">G Major</button>
+        <button onclick="selectChord('D')">D Major</button>
+        <button onclick="selectChord('A')">A Major</button>
+      </div>
+
+      <p id="selected">No chord selected</p>
+
+      <button class="start" onclick="startPractice()">Start Practice 🎯</button>
+    </div>
+  </div>
+
+<script>
+  function selectChord(chord) {
+    document.getElementById("selected").innerText =
+      "Selected Chord: " + chord;
+  }
+
+  function startPractice() {
+    alert("Practice session started 🎸 Keep going!");
+  }
+</script>
 
 </body>
 </html>
