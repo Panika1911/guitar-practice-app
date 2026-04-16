@@ -8,35 +8,86 @@
 
 <body>
 
-  <div class="container">
-    <h1>🎸 Guitar Practice Assistant</h1>
-    <p class="subtitle">Track your practice like a pro musician</p>
+<div class="container">
 
-    <div class="card">
-      <h2>Select Chord</h2>
+  <h1>🎸 Guitar Practice Assistant</h1>
+  <p class="subtitle">Practice smarter, not harder</p>
 
-      <div class="buttons">
-        <button onclick="selectChord('C')">C Major</button>
-        <button onclick="selectChord('G')">G Major</button>
-        <button onclick="selectChord('D')">D Major</button>
-        <button onclick="selectChord('A')">A Major</button>
-      </div>
+  <div class="card">
 
-      <p id="selected">No chord selected</p>
+    <h2>Select Chord</h2>
 
-      <button class="start" onclick="startPractice()">Start Practice 🎯</button>
+    <div class="buttons">
+      <button onclick="selectChord('C')">C Major</button>
+      <button onclick="selectChord('G')">G Major</button>
+      <button onclick="selectChord('D')">D Major</button>
+      <button onclick="selectChord('A')">A Major</button>
     </div>
+
+    <p id="selected">No chord selected</p>
+
+    <h3>⏱ Timer: <span id="timer">0</span>s</h3>
+
+    <button class="start" onclick="startPractice()">Start Practice</button>
+    <button class="stop" onclick="stopPractice()">Stop</button>
+
+    <p>📊 Sessions Completed: <span id="count">0</span></p>
+
   </div>
+</div>
 
 <script>
-  function selectChord(chord) {
-    document.getElementById("selected").innerText =
-      "Selected Chord: " + chord;
+let timer = 0;
+let interval;
+let sessions = localStorage.getItem("sessions") || 0;
+
+document.getElementById("count").innerText = sessions;
+
+let selectedChord = "";
+
+function selectChord(chord) {
+  selectedChord = chord;
+  document.getElementById("selected").innerText =
+    "Selected Chord: " + chord;
+
+  localStorage.setItem("lastChord", chord);
+
+  // small beep sound effect
+  let audio = new Audio("https://actions.google.com/sounds/v1/cartoon/pop.ogg");
+  audio.play();
+}
+
+function startPractice() {
+  if (!selectedChord) {
+    alert("Please select a chord first 🎸");
+    return;
   }
 
-  function startPractice() {
-    alert("Practice session started 🎸 Keep going!");
+  interval = setInterval(() => {
+    timer++;
+    document.getElementById("timer").innerText = timer;
+  }, 1000);
+}
+
+function stopPractice() {
+  clearInterval(interval);
+
+  timer = 0;
+  document.getElementById("timer").innerText = 0;
+
+  sessions++;
+  localStorage.setItem("sessions", sessions);
+  document.getElementById("count").innerText = sessions;
+}
+
+// Load last selected chord
+window.onload = () => {
+  const last = localStorage.getItem("lastChord");
+  if (last) {
+    document.getElementById("selected").innerText =
+      "Last Chosen Chord: " + last;
   }
+};
 </script>
 
 </body>
